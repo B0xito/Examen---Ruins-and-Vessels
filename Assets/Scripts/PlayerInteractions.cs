@@ -3,23 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using static UnityEditor.Progress;
 
 public class PlayerInteractions : MonoBehaviour
 {
     #region Movement Variables
     [Header("Movement Variables")]
-    [Range(1f, 6f)]
-    [SerializeField] float speed;
-    float ogSpeed;
-    [Range(7f, 10f)]
-    [SerializeField] float runSpeed;
+    [SerializeField] float speed = 6f;
+    [SerializeField] float ogSpeed;
+    [SerializeField] float runSpeed = 9f;
 
+    [Header("Stamina System")]
     public Image staminaBar;
-    [SerializeField] float stamina, maxStamina;
+    [SerializeField] float currentStamina;
+    [SerializeField] float maxStamina;
     [SerializeField] float runCost;
-
     [SerializeField] float chargeRate;
-    private Coroutine recharge;
+    bool isRecharging;
     #endregion
 
     #region Mining Variables
@@ -29,10 +29,20 @@ public class PlayerInteractions : MonoBehaviour
     [SerializeField] LayerMask minableMask;
     #endregion
 
+    #region Consumable Variables
+    [Header("Consumable Variables")]
+    [SerializeField] List<Consumable> consumables = new List<Consumable>();
+    Consumable currentItem;
+    [SerializeField] int itemAmount;
+    [SerializeField] TMP_Text itemAmountText;
+    [SerializeField] Image itemUI;
+    [SerializeField] Sprite notItemSprite;
+    #endregion
+
     private void Start()
     {
         maxStamina = 100f;
-        stamina = maxStamina;
+        currentStamina = maxStamina;
         ogSpeed = speed;
     }
 
@@ -40,6 +50,15 @@ public class PlayerInteractions : MonoBehaviour
     {
         Movement();
         Mining();
+        CheckStamina();
+
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            ConsumeItem(currentItem);
+        }
+
+        if (consumables.Count <= 0) { itemUI.sprite = notItemSprite; }
+        else { itemUI.sprite = currentItem.consumableSprite; }
     }
 
     void Movement()
@@ -56,39 +75,46 @@ public class PlayerInteractions : MonoBehaviour
         if (movement != Vector3.zero)
         {
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(movement), 0.15F);
-        }
+        }      
+    }
 
-        if (Input.GetKey(KeyCode.LeftShift) && stamina > 0)
+    void CheckStamina()
+    {
+        staminaBar.fillAmount = currentStamina / maxStamina;
+        if (Input.GetKey(KeyCode.LeftShift) && currentStamina > 0)
         {
-            Debug.Log("Running");
-            speed = runSpeed;
-            stamina -= runCost;
-            if (stamina < 0) stamina = 0;
+            if (currentStamina > 0)
+            {
+                currentStamina -= runCost * Time.deltaTime;
+                speed = runSpeed;
+            }
+            else
+            {
+                speed = ogSpeed;
+                currentStamina = 0;               
+            }
         }
         else
         {
             speed = ogSpeed;
-            if (stamina < maxStamina)
+            if (currentStamina < maxStamina)
             {
-                if (recharge != null) StopCoroutine(recharge);
-                recharge = StartCoroutine(RechargeStamina());
+                if (!isRecharging) StartCoroutine(RechargeStamina());
             }
         }
-        staminaBar.fillAmount = stamina / maxStamina;
-
     }
 
-    private IEnumerator RechargeStamina()
+    IEnumerator RechargeStamina()
     {
+        isRecharging = true;
         yield return new WaitForSeconds(1f);
-
-        while (stamina < maxStamina)
+        while (currentStamina < maxStamina)
         {
-            stamina += chargeRate / 10f;
-            if (stamina > maxStamina) stamina = maxStamina;
-            staminaBar.fillAmount = stamina / maxStamina;
+            currentStamina += chargeRate / 10f;
+            if (currentStamina > maxStamina) currentStamina = maxStamina;
             yield return new WaitForSeconds(.1f);
         }
+        isRecharging = false;
     }
 
     void Mining()
@@ -112,6 +138,49 @@ public class PlayerInteractions : MonoBehaviour
                 {
                     Debug.Log("Not rift");
                 }
+            }
+        }
+    }
+
+    public void AddConsumable(Consumable item)
+    {
+        consumables.Add(item);
+        Debug.Log(item.GetComponent<Consumable>().consumableName + " " + "added to consumables");
+        itemUI.sprite = item.GetComponent<Consumable>().consumableSprite;
+    }
+
+    public void ConsumeItem(Consumable item)
+    {
+        if (consumables.Contains(item))
+        {
+            Debug.Log(item.GetComponent<Consumable>().consumableName + " " + "removed from consumables");
+            currentStamina += item.GetComponent<Consumable>().regenerationAmount;
+            consumables.Remove(item);
+            itemUI.sprite = notItemSprite;
+            itemAmount--;
+            itemAmountText.text = itemAmount.ToString();
+            if (itemAmount != 0 || consumables.Count > 0) { currentItem = consumables[0]; }
+            if (itemAmount <= 0)
+            {
+                itemAmount = 0;
+                currentItem = null;
+            }
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.GetComponent<Consumable>())
+        {
+            Debug.Log("Trigger Consumable");
+            Consumable thisConsumable = other.GetComponent<Consumable>();
+            AddConsumable(thisConsumable);
+            currentItem = thisConsumable;
+            itemAmount++;
+            itemAmountText.text = itemAmount.ToString();
+            if (other.CompareTag("Item"))
+            {
+                Destroy(other.gameObject);
             }
         }
     }

@@ -49,8 +49,11 @@ public class PlayerInteractions : MonoBehaviour
     void Update()
     {
         Movement();
+
         Mining();
+
         CheckStamina();
+        staminaBar.fillAmount = currentStamina / maxStamina;
 
         if (Input.GetKeyDown(KeyCode.C))
         {
@@ -80,8 +83,7 @@ public class PlayerInteractions : MonoBehaviour
 
     void CheckStamina()
     {
-        staminaBar.fillAmount = currentStamina / maxStamina;
-        if (Input.GetKey(KeyCode.LeftShift) && currentStamina > 0)
+        if (Input.GetKey(KeyCode.LeftShift))
         {
             if (currentStamina > 0)
             {
@@ -90,8 +92,8 @@ public class PlayerInteractions : MonoBehaviour
             }
             else
             {
-                speed = ogSpeed;
                 currentStamina = 0;               
+                speed = ogSpeed;
             }
         }
         else

@@ -22,6 +22,7 @@ public class PlayerInteractions : MonoBehaviour
     [SerializeField] float maxStamina;
     [SerializeField] float runCost;
     [SerializeField] float chargeRate;
+    [SerializeField] bool fullStamina;
     bool isRecharging;
     #endregion
 
@@ -41,6 +42,7 @@ public class PlayerInteractions : MonoBehaviour
     [SerializeField] TMP_Text itemAmountText;
     [SerializeField] Image itemUI;
     [SerializeField] Sprite notItemSprite;
+    [SerializeField] TMP_Text regenAmount;
     #endregion
 
     #region Pieces Variables
@@ -87,7 +89,7 @@ public class PlayerInteractions : MonoBehaviour
         #endregion
 
         #region Consumable
-        if (Input.GetKeyDown(KeyCode.C))
+        if (Input.GetKeyDown(KeyCode.C) && fullStamina == false)
         {
             ConsumeItem(currentItem);
         }
@@ -136,6 +138,16 @@ public class PlayerInteractions : MonoBehaviour
             {
                 if (!isRecharging) StartCoroutine(RechargeStamina());
             }
+        }
+
+        if (currentStamina >= maxStamina)
+        {
+            currentStamina = maxStamina;
+            fullStamina = true;
+        }
+        else
+        { 
+            fullStamina = false;
         }
     }
 
@@ -186,6 +198,7 @@ public class PlayerInteractions : MonoBehaviour
         consumables.Add(item);
         Debug.Log(item.GetComponent<Consumable>().consumableName + " " + "added to consumables");
         itemUI.sprite = item.GetComponent<Consumable>().consumableSprite;
+        regenAmount.text = "+" + " " + item.GetComponent<Consumable>().regenerationAmount.ToString();
     }
 
     public void ConsumeItem(Consumable item)
@@ -198,11 +211,17 @@ public class PlayerInteractions : MonoBehaviour
             itemUI.sprite = notItemSprite;
             itemAmount--;
             itemAmountText.text = itemAmount.ToString();
-            if (itemAmount != 0 || consumables.Count > 0) { currentItem = consumables[0]; }
+            if (itemAmount != 0 || consumables.Count > 0) 
+            { 
+                currentItem = consumables[0]; 
+                regenAmount.text = "+" + " " + item.GetComponent<Consumable>().regenerationAmount.ToString();
+            }
+
             if (itemAmount <= 0)
             {
                 itemAmount = 0;
                 currentItem = null;
+                regenAmount = null;
             }
         }
     }

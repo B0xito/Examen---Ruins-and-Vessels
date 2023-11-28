@@ -10,6 +10,7 @@ TagManager:
   - BluePiece
   - GreenPiece
   - GoldenPiece
+  - Transport
   layers:
   - Default
   - TransparentFX

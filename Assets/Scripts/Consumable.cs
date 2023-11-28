@@ -7,5 +7,7 @@ public class Consumable : MonoBehaviour
     public string consumableName;
     public Sprite consumableSprite;
     public float regenerationAmount;
-    public float consumablePrice;
+
+    // Activar si tienda esta habilitada
+    // public float consumablePrice;
 }

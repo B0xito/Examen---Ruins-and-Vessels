@@ -12,9 +12,12 @@ public class PlayerInteractions : MonoBehaviour
     [SerializeField] float speed = 6f;
     [SerializeField] float ogSpeed;
     [SerializeField] float runSpeed = 9f;
+    #endregion
 
+    #region Stamina System
     [Header("Stamina System")]
     public Image staminaBar;
+    [SerializeField] TMP_Text staminaAmountText;
     [SerializeField] float currentStamina;
     [SerializeField] float maxStamina;
     [SerializeField] float runCost;
@@ -27,6 +30,7 @@ public class PlayerInteractions : MonoBehaviour
     [Range(1f, 5f)]
     [SerializeField] float rayDistance;
     [SerializeField] LayerMask minableMask;
+    [SerializeField] SpawnItem spawnItem;
     #endregion
 
     #region Consumable Variables
@@ -37,6 +41,30 @@ public class PlayerInteractions : MonoBehaviour
     [SerializeField] TMP_Text itemAmountText;
     [SerializeField] Image itemUI;
     [SerializeField] Sprite notItemSprite;
+    #endregion
+
+    #region Pieces Variables
+    [Header("Pieces Variables")]
+    [SerializeField] List<PieceData> pieces = new List<PieceData>();
+    public bool addingPiece = false;
+    private Coroutine adding;
+
+    [Header("Pieces Count")]
+    //Red pieces
+    public int redCount;
+    [SerializeField] TMP_Text redCountText;
+
+    //Blue pieces
+    public int blueCount;
+    [SerializeField] TMP_Text blueCountText;
+
+    //Green pieces
+    public int greenCount;
+    [SerializeField] TMP_Text greenCountText;
+
+    //Golden pieces
+    public int goldenCount;
+    [SerializeField] TMP_Text goldenCountText;
     #endregion
 
     private void Start()
@@ -52,9 +80,13 @@ public class PlayerInteractions : MonoBehaviour
 
         Mining();
 
+        #region Stamina System
         CheckStamina();
         staminaBar.fillAmount = currentStamina / maxStamina;
+        staminaAmountText.text = currentStamina.ToString("F0") + " " + "/" + " " + maxStamina.ToString();
+        #endregion
 
+        #region Consumable
         if (Input.GetKeyDown(KeyCode.C))
         {
             ConsumeItem(currentItem);
@@ -62,6 +94,7 @@ public class PlayerInteractions : MonoBehaviour
 
         if (consumables.Count <= 0) { itemUI.sprite = notItemSprite; }
         else { itemUI.sprite = currentItem.consumableSprite; }
+        #endregion
     }
 
     void Movement()
@@ -106,6 +139,34 @@ public class PlayerInteractions : MonoBehaviour
         }
     }
 
+    void Mining()
+    {
+        RaycastHit hit;
+        Debug.DrawRay(transform.position, transform.forward * rayDistance, Color.red);
+
+        //Revisa con un rayo desde la posicion 0,0 del player hacia adelante si hay un gameobject
+        //con el layer minable, si es asi entra el if
+        if (Physics.Raycast(transform.position, transform.forward, out hit, rayDistance, minableMask))
+        {
+            spawnItem = hit.transform.gameObject.GetComponent<SpawnItem>();
+
+            if (Input.GetKeyDown(KeyCode.F))
+            {
+                Debug.Log("Mining");
+                if (hit.collider.CompareTag("Rift"))
+                {
+                    Debug.Log("GameObject spawned");
+                    int rand = Random.Range(5, 10);
+                    spawnItem.Mined(rand);
+                }
+                else
+                {
+                    Debug.Log("Not rift");
+                }
+            }
+        }
+    }
+
     IEnumerator RechargeStamina()
     {
         isRecharging = true;
@@ -119,31 +180,7 @@ public class PlayerInteractions : MonoBehaviour
         isRecharging = false;
     }
 
-    void Mining()
-    {
-        RaycastHit hit;
-        Debug.DrawRay(transform.position, transform.forward * rayDistance, Color.red);
-
-        //Revisa con un rayo desde la posicion 0,0 del player hacia adelante si hay un gameobject
-        //con el layer minable, si es asi entra el if
-        if (Physics.Raycast(transform.position, transform.forward, out hit, rayDistance, minableMask))
-        {
-            if (Input.GetKeyDown(KeyCode.F))
-            {
-                Debug.Log("Mining");
-                if (hit.collider.CompareTag("Rift"))
-                {
-                    Debug.Log("GameObject spawned");
-
-                }
-                else
-                {
-                    Debug.Log("Not rift");
-                }
-            }
-        }
-    }
-
+    #region Consumable
     public void AddConsumable(Consumable item)
     {
         consumables.Add(item);
@@ -169,9 +206,40 @@ public class PlayerInteractions : MonoBehaviour
             }
         }
     }
+    #endregion
+
+    #region Pieces
+    private IEnumerator AddingPieceTimer()
+    {
+        yield return new WaitForSeconds(1.7f);
+
+        addingPiece = false;
+    }
+
+    public void AddPiece(PieceData fragment)
+    {
+        if (fragment.CompareTag("RedPiece") || fragment.CompareTag("BluePiece") || 
+            fragment.CompareTag("GreenPiece") || fragment.CompareTag("GoldenPiece"))
+        {
+            pieces.Add(fragment);
+            addingPiece = true;
+            if (adding != null) StopCoroutine(adding);
+            adding = StartCoroutine(AddingPieceTimer());
+        }
+    }
+
+    public void RemovePiece(PieceData fragment)
+    {
+        if (pieces.Contains(fragment))
+        {
+            pieces.Remove(fragment);
+        }
+    }
+    #endregion
 
     private void OnTriggerEnter(Collider other)
     {
+        #region Consumable
         if (other.GetComponent<Consumable>())
         {
             Debug.Log("Trigger Consumable");
@@ -182,8 +250,22 @@ public class PlayerInteractions : MonoBehaviour
             itemAmountText.text = itemAmount.ToString();
             if (other.CompareTag("Item"))
             {
-                Destroy(other.gameObject);
+                other.gameObject.SetActive(false);
             }
         }
+        #endregion
+
+        #region Pieces
+        if (other.gameObject.GetComponent<PieceData>())
+        {
+            AddPiece(other.GetComponent<PieceData>());
+
+            // La pieza se destruye, pero el script no se guarda65
+            if (other.CompareTag("RedPiece")) { redCount++; redCountText.text = redCount.ToString(); Destroy(other.gameObject); }
+            if (other.CompareTag("BluePiece")) { blueCount++; blueCountText.text = blueCount.ToString(); Destroy(other.gameObject); }
+            if (other.CompareTag("GreenPiece")) { greenCount++; greenCountText.text = greenCount.ToString(); Destroy(other.gameObject); }
+            if (other.CompareTag("GoldenPiece")) { goldenCount++; goldenCountText.text = goldenCount.ToString(); Destroy(other.gameObject); }
+        }
+        #endregion
     }
 }

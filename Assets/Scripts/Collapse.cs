@@ -22,6 +22,7 @@ public class Collapse : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))  // Reemplaza esto con la condición para iniciar el colapso
         {
+            print("1");
             initialCamPos = playerCamera.gameObject.transform.localPosition;
             StartCoroutine(StartCollapse());
         }
@@ -29,17 +30,18 @@ public class Collapse : MonoBehaviour
 
     private IEnumerator StartCollapse()
     {
+        print("2");
         float elapsed = 0.0f;
 
         while (elapsed < shakeDuration && !isCollidingWithShelter)
         {
-            Debug.Log("Shaking");
-            Vector3 originalCamPos = playerCamera.transform.position;
+            print("3");
+            Vector3 originalCamPos = playerCamera.transform.localPosition;
 
             float x = Random.Range(-1f, 1f) * shakeMagnitude;
             float y = Random.Range(-1f, 1f) * shakeMagnitude;
 
-            playerCamera.transform.position = new Vector3(originalCamPos.x + x, originalCamPos.y + y, originalCamPos.z);
+            playerCamera.transform.localPosition = new Vector3(originalCamPos.x + x, originalCamPos.y + y, originalCamPos.z);
 
             elapsed += Time.deltaTime;
 
@@ -47,15 +49,15 @@ public class Collapse : MonoBehaviour
 
             playerCamera.transform.localPosition = originalCamPos;
         }
-
         if (!isCollidingWithShelter)
         {
             Debug.Log("Time out! Position restablishied");
             player.transform.position = initialPosition.position;
         }
 
-        playerCamera.gameObject.transform.position = initialCamPos;
-        Debug.Log("Position Cam");
+        print("4");
+        playerCamera.gameObject.transform.localPosition = initialCamPos;
+        print("5");
     }
 
     private void OnTriggerEnter(Collider other)

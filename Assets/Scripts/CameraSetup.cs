@@ -7,10 +7,10 @@ public class CameraSetup : MonoBehaviour
     void Start()
     {
         // Establecer la posición de la cámara
-        transform.position = new Vector3(0, 15, -15);
+        transform.position = new Vector3(0, 0, 0);
 
         // Establecer la rotación de la cámara
-        transform.rotation = Quaternion.Euler(40, 0, 0);
+        transform.rotation = Quaternion.Euler(0, 0, 0);
     }
 }
 

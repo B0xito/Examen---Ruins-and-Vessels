@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    [Header("Vessels Target")]
     [SerializeField] VesselsFabrication vesselsFabrication;
 
     public int redVesselsObj;

@@ -9,7 +9,7 @@ public class PlayerInteractions : MonoBehaviour
 {
     #region Movement Variables
     [Header("Movement Variables")]
-    [SerializeField] float speed = 6f;
+    [SerializeField] float walkSpeed = 6f;
     [SerializeField] float ogSpeed;
     [SerializeField] float runSpeed = 9f;
     #endregion
@@ -73,12 +73,15 @@ public class PlayerInteractions : MonoBehaviour
     {
         maxStamina = 100f;
         currentStamina = maxStamina;
-        ogSpeed = speed;
+        ogSpeed = walkSpeed;
     }
 
     void Update()
     {
-        Movement();
+        // Dependiendo del tipo de camera es el tipo de movimiento
+        FirstPersonMovement();
+
+        //ThirdPersonMovement();
 
         Mining();
 
@@ -99,7 +102,14 @@ public class PlayerInteractions : MonoBehaviour
         #endregion
     }
 
-    void Movement()
+    void FirstPersonMovement()
+    {
+        float h = Input.GetAxis("Horizontal") * walkSpeed * Time.deltaTime;
+        float v = Input.GetAxis("Vertical") * walkSpeed * Time.deltaTime;
+        transform.Translate(h, 0, v);
+    }
+
+    void ThirdPersonMovement()
     {
         float moveHorizontal = Input.GetAxis("Horizontal");
         float moveVertical = Input.GetAxis("Vertical");
@@ -107,7 +117,7 @@ public class PlayerInteractions : MonoBehaviour
         Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
 
         // Esto hace que el personaje se mueva
-        transform.position = transform.position + movement * speed * Time.deltaTime;
+        transform.position = transform.position + movement * walkSpeed * Time.deltaTime;
 
         // Esto hace que el personaje mire hacia la dirección de movimiento
         if (movement != Vector3.zero)
@@ -123,17 +133,17 @@ public class PlayerInteractions : MonoBehaviour
             if (currentStamina > 0)
             {
                 currentStamina -= runCost * Time.deltaTime;
-                speed = runSpeed;
+                walkSpeed = runSpeed;
             }
             else
             {
                 currentStamina = 0;               
-                speed = ogSpeed;
+                walkSpeed = ogSpeed;
             }
         }
         else
         {
-            speed = ogSpeed;
+            walkSpeed = ogSpeed;
             if (currentStamina < maxStamina)
             {
                 if (!isRecharging) StartCoroutine(RechargeStamina());

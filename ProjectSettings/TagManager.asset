@@ -11,6 +11,8 @@ TagManager:
   - GreenPiece
   - GoldenPiece
   - Transport
+  - Ground
+  - Shelter
   layers:
   - Default
   - TransparentFX

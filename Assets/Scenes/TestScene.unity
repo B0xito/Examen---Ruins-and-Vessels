@@ -1884,6 +1884,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4897562262307351311, guid: b06b2f33c17d84f4ca4e2f585f14b6d9, type: 3}
+      propertyPath: initialCamPos
+      value: 
+      objectReference: {fileID: 7670276485404676471}
+    - target: {fileID: 4897562262307351311, guid: b06b2f33c17d84f4ca4e2f585f14b6d9, type: 3}
       propertyPath: initialPosition
       value: 
       objectReference: {fileID: 1900516185}
@@ -1896,6 +1900,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b06b2f33c17d84f4ca4e2f585f14b6d9, type: 3}
+--- !u!4 &7670276485404676471 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5158425666008560873, guid: b06b2f33c17d84f4ca4e2f585f14b6d9, type: 3}
+  m_PrefabInstance: {fileID: 7670276485404676470}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &8052633826980290697 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1341978062098560105, guid: 16f0b2797febd9544b6faf37748d9d40, type: 3}

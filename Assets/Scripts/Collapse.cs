@@ -9,6 +9,7 @@ public class Collapse : MonoBehaviour
     [SerializeField] float shakeDuration = 5f;
     [SerializeField] float shakeMagnitude = 0.7f;
     [SerializeField] Transform initialPosition;
+    [SerializeField] Vector3 initialCamPos;
     [SerializeField] bool isCollidingWithShelter = false;
 
     private void Start()
@@ -21,6 +22,7 @@ public class Collapse : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))  // Reemplaza esto con la condición para iniciar el colapso
         {
+            initialCamPos = playerCamera.gameObject.transform.localPosition;
             StartCoroutine(StartCollapse());
         }
     }
@@ -31,6 +33,7 @@ public class Collapse : MonoBehaviour
 
         while (elapsed < shakeDuration && !isCollidingWithShelter)
         {
+            Debug.Log("Shaking");
             Vector3 originalCamPos = playerCamera.transform.position;
 
             float x = Random.Range(-1f, 1f) * shakeMagnitude;
@@ -42,13 +45,17 @@ public class Collapse : MonoBehaviour
 
             yield return null;
 
-            playerCamera.transform.position = originalCamPos;
+            playerCamera.transform.localPosition = originalCamPos;
         }
 
         if (!isCollidingWithShelter)
         {
+            Debug.Log("Time out! Position restablishied");
             player.transform.position = initialPosition.position;
         }
+
+        playerCamera.gameObject.transform.position = initialCamPos;
+        Debug.Log("Position Cam");
     }
 
     private void OnTriggerEnter(Collider other)
@@ -56,6 +63,7 @@ public class Collapse : MonoBehaviour
         if (other.CompareTag("Shelter"))
         {
             isCollidingWithShelter = true;
+            playerCamera.gameObject.transform.localPosition = initialCamPos;
         }
     }
 

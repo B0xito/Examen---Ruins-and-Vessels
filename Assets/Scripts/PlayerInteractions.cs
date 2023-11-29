@@ -198,7 +198,10 @@ public class PlayerInteractions : MonoBehaviour
         consumables.Add(item);
         Debug.Log(item.GetComponent<Consumable>().consumableName + " " + "added to consumables");
         itemUI.sprite = item.GetComponent<Consumable>().consumableSprite;
-        regenAmount.text = "+" + " " + item.GetComponent<Consumable>().regenerationAmount.ToString();
+        if (currentItem == consumables[0])
+        {
+            regenAmount.text = "+" + " " + consumables[0].GetComponent<Consumable>().regenerationAmount.ToString();
+        }
     }
 
     public void ConsumeItem(Consumable item)
@@ -214,14 +217,13 @@ public class PlayerInteractions : MonoBehaviour
             if (itemAmount != 0 || consumables.Count > 0) 
             { 
                 currentItem = consumables[0]; 
-                regenAmount.text = "+" + " " + item.GetComponent<Consumable>().regenerationAmount.ToString();
             }
 
             if (itemAmount <= 0)
             {
                 itemAmount = 0;
                 currentItem = null;
-                regenAmount = null;
+                regenAmount.text = null;
             }
         }
     }

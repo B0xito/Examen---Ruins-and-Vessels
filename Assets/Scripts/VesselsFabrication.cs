@@ -63,8 +63,8 @@ public class VesselsFabrication : MonoBehaviour
     {
         if (other.GetComponent<PlayerInteractions>())
         {
-            piecesUIAnim.SetFloat("status", 1);
             playerInteractions = other.GetComponent<PlayerInteractions>();
+            piecesUIAnim.SetFloat("status", 1);
             if (playerInteractions.redCount >= 10) { FabricateRed(); }
             if (playerInteractions.blueCount >= 10) { FabricateBlue(); }
             if (playerInteractions.greenCount >= 10) { FabricateGreen(); }

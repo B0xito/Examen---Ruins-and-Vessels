@@ -1,9 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Collapse : MonoBehaviour
 {
+    [Header("Shake Variables")]
     [SerializeField] Camera playerCamera;
     [SerializeField] Transform player;
     [SerializeField] float shakeDuration = 5f;
@@ -12,26 +15,47 @@ public class Collapse : MonoBehaviour
     [SerializeField] Vector3 initialCamPos;
     [SerializeField] bool isCollidingWithShelter = false;
 
+    [SerializeField] PlayerInteractions playerInteractions;
+    [SerializeField] int collapseProbabilities;
+    [SerializeField] int collapseTotalProbabilities;
+    [SerializeField] int capCollapseProbability = 100;
+    [SerializeField] Image collapseBar;
+    [SerializeField] TMP_Text timer;
+
     private void Start()
     {
         player = GetComponent<Transform>();
         playerCamera = GetComponentInChildren<Camera>();
+        collapseTotalProbabilities = 0;
+        capCollapseProbability = 100;
     }
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))  // Reemplaza esto con la condición para iniciar el colapso
+        timer.text = " ";
+        collapseBar.fillAmount = collapseTotalProbabilities / capCollapseProbability;
+        if (collapseTotalProbabilities >= capCollapseProbability)  // Reemplaza esto con la condición para iniciar el colapso
         {
             print("1");
             initialCamPos = playerCamera.gameObject.transform.localPosition;
             StartCoroutine(StartCollapse());
+            collapseBar.fillAmount = collapseTotalProbabilities / capCollapseProbability;
         }
+    }
+
+    public void CollapseProb()
+    {
+        collapseProbabilities = Random.Range(0, 25);
+        Debug.Log(collapseProbabilities);
+        collapseTotalProbabilities += collapseProbabilities;
+        collapseBar.fillAmount = collapseTotalProbabilities / capCollapseProbability;
     }
 
     private IEnumerator StartCollapse()
     {
         print("2");
         float elapsed = 0.0f;
+        timer.text = elapsed.ToString("F0");
 
         while (elapsed < shakeDuration && !isCollidingWithShelter)
         {
@@ -44,6 +68,7 @@ public class Collapse : MonoBehaviour
             playerCamera.transform.localPosition = new Vector3(originalCamPos.x + x, originalCamPos.y + y, originalCamPos.z);
 
             elapsed += Time.deltaTime;
+            timer.text = elapsed.ToString("F0");
 
             yield return null;
 
@@ -53,10 +78,12 @@ public class Collapse : MonoBehaviour
         {
             Debug.Log("Time out! Position restablishied");
             player.transform.position = initialPosition.position;
+            collapseTotalProbabilities = 0;
         }
 
         print("4");
         playerCamera.gameObject.transform.localPosition = initialCamPos;
+        collapseTotalProbabilities = 0;
         print("5");
     }
 

@@ -32,6 +32,9 @@ public class PlayerInteractions : MonoBehaviour
     [SerializeField] float rayDistance;
     [SerializeField] LayerMask minableMask;
     [SerializeField] SpawnItem spawnItem;
+
+    [Header("Collapse")]
+    [SerializeField] Collapse collapse;
     #endregion
 
     #region Consumable Variables
@@ -177,6 +180,7 @@ public class PlayerInteractions : MonoBehaviour
                 Debug.Log("Mining");
                 if (hit.collider.CompareTag("Rift"))
                 {
+                    collapse.CollapseProb();
                     Debug.Log("GameObject spawned");
                     int rand = Random.Range(5, 10);
                     spawnItem.Mined(rand);

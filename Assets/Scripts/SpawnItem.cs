@@ -15,6 +15,7 @@ public class SpawnItem : MonoBehaviour
 {
     //De donde spawnean
     MeshRenderer meshRender;
+    [SerializeField] GameObject rift;
 
     [Header("Spawning Variables")]
     //Items a spawnear
@@ -24,6 +25,8 @@ public class SpawnItem : MonoBehaviour
     //Area de spawneo
     public BoxCollider spawnCollider;
     private Coroutine spawnObj;
+
+    public List<GameObject> spawnedItems = new List<GameObject>();
 
     private void Start()
     {
@@ -104,4 +107,51 @@ public class SpawnItem : MonoBehaviour
         return randomPosition;
     }
 
+    public void AddSpawned(GameObject item)
+    {
+        spawnedItems.Add(item);
+    }
+
+    public void RemoveSpawned(GameObject item) 
+    {
+        Debug.Log("Removed item");
+
+        //spawnedItems.Remove(item);
+
+        for (int i = 0; i < spawnedItems.Count; i++)
+        {
+            if (spawnedItems[i] == item)
+            {
+                spawnedItems.RemoveAt(i);
+            }
+
+            if (spawnedItems.Count == 0)
+            {
+                Destroy(rift);
+            }
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("RedPiece") || other.CompareTag("BluePiece") ||
+            other.CompareTag("GreenPiece") || other.CompareTag("GoldenPiece") ||
+            other.GetComponent<Consumable>())
+        {
+            if (!spawnedItems.Contains(other.transform.gameObject))
+            {
+                AddSpawned(other.transform.gameObject);
+            }
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("RedPiece") || other.CompareTag("BluePiece") ||
+            other.CompareTag("GreenPiece") || other.CompareTag("GoldenPiece") ||
+            other.GetComponent<Consumable>())
+        {
+            RemoveSpawned(other.transform.gameObject);
+        }
+    }
 }

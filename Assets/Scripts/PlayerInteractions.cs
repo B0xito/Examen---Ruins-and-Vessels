@@ -32,6 +32,7 @@ public class PlayerInteractions : MonoBehaviour
     [SerializeField] float rayDistance;
     [SerializeField] LayerMask minableMask;
     [SerializeField] SpawnItem spawnItem;
+    [SerializeField] Animator riftAnim;
 
     [Header("Collapse")]
     [SerializeField] Collapse collapse;
@@ -45,12 +46,12 @@ public class PlayerInteractions : MonoBehaviour
     [SerializeField] TMP_Text itemAmountText;
     [SerializeField] Image itemUI;
     [SerializeField] Sprite notItemSprite;
-    [SerializeField] TMP_Text regenAmount;
+    [SerializeField] GameObject regenAmount;
     #endregion
 
     #region Pieces Variables
     [Header("Pieces Variables")]
-    [SerializeField] List<PieceData> pieces = new List<PieceData>();
+    //[SerializeField] List<PieceData> pieces = new List<PieceData>();
     public bool addingPiece = false;
     private Coroutine adding;
 
@@ -82,9 +83,9 @@ public class PlayerInteractions : MonoBehaviour
     void Update()
     {
         // Dependiendo del tipo de camera es el tipo de movimiento
-        FirstPersonMovement();
+        // FirstPersonMovement();
 
-        //ThirdPersonMovement();
+        ThirdPersonMovement();
 
         Mining();
 
@@ -100,7 +101,8 @@ public class PlayerInteractions : MonoBehaviour
             ConsumeItem(currentItem);
         }
 
-        if (consumables.Count <= 0) { itemUI.sprite = notItemSprite; }
+        if (consumables.Count > 0) { regenAmount.SetActive(true); }
+        if (consumables.Count <= 0) { itemUI.sprite = notItemSprite; regenAmount.SetActive(false);  }
         else { itemUI.sprite = currentItem.consumableSprite; }
         #endregion
     }
@@ -174,16 +176,14 @@ public class PlayerInteractions : MonoBehaviour
         if (Physics.Raycast(transform.position, transform.forward, out hit, rayDistance, minableMask))
         {
             spawnItem = hit.transform.gameObject.GetComponent<SpawnItem>();
+            riftAnim = hit.transform.gameObject.GetComponentInParent<Animator>();
 
             if (Input.GetKeyDown(KeyCode.F))
             {
                 Debug.Log("Mining");
                 if (hit.collider.CompareTag("Rift"))
                 {
-                    collapse.CollapseProb();
-                    Debug.Log("GameObject spawned");
-                    int rand = Random.Range(5, 10);
-                    spawnItem.Mined(rand);
+                    riftAnim.SetBool("mining", true);                   
                 }
                 else
                 {
@@ -191,6 +191,15 @@ public class PlayerInteractions : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void SpawnItemsFromRift()
+    {
+        collapse.CollapseProb();
+        Debug.Log("GameObject spawned");
+        int rand = Random.Range(5, 10);
+        spawnItem.Mined(rand);
+        riftAnim.SetBool("mining", false);
     }
 
     IEnumerator RechargeStamina()
@@ -212,10 +221,6 @@ public class PlayerInteractions : MonoBehaviour
         consumables.Add(item);
         Debug.Log(item.GetComponent<Consumable>().consumableName + " " + "added to consumables");
         itemUI.sprite = item.GetComponent<Consumable>().consumableSprite;
-        if (currentItem == consumables[0])
-        {
-            regenAmount.text = "+" + " " + consumables[0].GetComponent<Consumable>().regenerationAmount.ToString();
-        }
     }
 
     public void ConsumeItem(Consumable item)
@@ -227,18 +232,7 @@ public class PlayerInteractions : MonoBehaviour
             consumables.Remove(item);
             itemUI.sprite = notItemSprite;
             itemAmount--;
-            itemAmountText.text = itemAmount.ToString();
-            if (itemAmount != 0 || consumables.Count > 0) 
-            { 
-                currentItem = consumables[0]; 
-            }
-
-            if (itemAmount <= 0)
-            {
-                itemAmount = 0;
-                currentItem = null;
-                regenAmount.text = null;
-            }
+            itemAmountText.text = itemAmount.ToString();          
         }
     }
     #endregion
@@ -246,30 +240,30 @@ public class PlayerInteractions : MonoBehaviour
     #region Pieces
     private IEnumerator AddingPieceTimer()
     {
-        yield return new WaitForSeconds(1.7f);
+       yield return new WaitForSeconds(1.7f);
 
-        addingPiece = false;
+       addingPiece = false;
     }
 
-    public void AddPiece(PieceData fragment)
-    {
-        if (fragment.CompareTag("RedPiece") || fragment.CompareTag("BluePiece") || 
-            fragment.CompareTag("GreenPiece") || fragment.CompareTag("GoldenPiece"))
-        {
-            pieces.Add(fragment);
-            addingPiece = true;
-            if (adding != null) StopCoroutine(adding);
-            adding = StartCoroutine(AddingPieceTimer());
-        }
-    }
+    //public void AddPiece(PieceData fragment)
+    //{
+    //    if (fragment.CompareTag("RedPiece") || fragment.CompareTag("BluePiece") || 
+    //        fragment.CompareTag("GreenPiece") || fragment.CompareTag("GoldenPiece"))
+    //    {
+    //        pieces.Add(fragment);
+    //        addingPiece = true;
+    //        if (adding != null) StopCoroutine(adding);
+    //        adding = StartCoroutine(AddingPieceTimer());
+    //    }
+    //}
 
-    public void RemovePiece(PieceData fragment)
-    {
-        if (pieces.Contains(fragment))
-        {
-            pieces.Remove(fragment);
-        }
-    }
+    //public void RemovePiece(PieceData fragment)
+    //{
+    //    if (pieces.Contains(fragment))
+    //    {
+    //        pieces.Remove(fragment);
+    //    }
+    //}
     #endregion
 
     private void OnTriggerEnter(Collider other)
@@ -293,13 +287,13 @@ public class PlayerInteractions : MonoBehaviour
         #region Pieces
         if (other.gameObject.GetComponent<PieceData>())
         {
-            AddPiece(other.GetComponent<PieceData>());
+            //AddPiece(other.GetComponent<PieceData>());
 
             // La pieza se destruye, pero el script no se guarda65
-            if (other.CompareTag("RedPiece")) { redCount++; redCountText.text = redCount.ToString(); Destroy(other.gameObject); }
-            if (other.CompareTag("BluePiece")) { blueCount++; blueCountText.text = blueCount.ToString(); Destroy(other.gameObject); }
-            if (other.CompareTag("GreenPiece")) { greenCount++; greenCountText.text = greenCount.ToString(); Destroy(other.gameObject); }
-            if (other.CompareTag("GoldenPiece")) { goldenCount++; goldenCountText.text = goldenCount.ToString(); Destroy(other.gameObject); }
+            if (other.CompareTag("RedPiece")) { redCount++; redCountText.text = redCount.ToString(); spawnItem.spawnedItems.Remove(other.gameObject); Destroy(other.gameObject); addingPiece = true; if (adding != null) StopCoroutine(adding); adding = StartCoroutine(AddingPieceTimer()); }
+            if (other.CompareTag("BluePiece")) { blueCount++; blueCountText.text = blueCount.ToString(); spawnItem.spawnedItems.Remove(other.gameObject); Destroy(other.gameObject); addingPiece = true; if (adding != null) StopCoroutine(adding); adding = StartCoroutine(AddingPieceTimer()); }
+            if (other.CompareTag("GreenPiece")) { greenCount++; greenCountText.text = greenCount.ToString(); spawnItem.spawnedItems.Remove(other.gameObject); Destroy(other.gameObject); addingPiece = true; if (adding != null) StopCoroutine(adding); adding = StartCoroutine(AddingPieceTimer()); }
+            if (other.CompareTag("GoldenPiece")) { goldenCount++; goldenCountText.text = goldenCount.ToString(); spawnItem.spawnedItems.Remove(other.gameObject); Destroy(other.gameObject); addingPiece = true; if (adding != null) StopCoroutine(adding); adding = StartCoroutine(AddingPieceTimer()); }
         }
         #endregion
     }

@@ -16,16 +16,17 @@ public class Collapse : MonoBehaviour
     [SerializeField] bool isCollidingWithShelter = false;
 
     [SerializeField] PlayerInteractions playerInteractions;
-    [SerializeField] int collapseProbabilities;
-    [SerializeField] int collapseTotalProbabilities;
-    [SerializeField] int capCollapseProbability = 100;
+    [SerializeField] float collapseProbabilities;
+    [SerializeField] float collapseTotalProbabilities;
+    [SerializeField] float capCollapseProbability = 100;
     [SerializeField] Image collapseBar;
     [SerializeField] TMP_Text timer;
+    [SerializeField] bool isShaking;
 
     private void Start()
     {
         player = GetComponent<Transform>();
-        playerCamera = GetComponentInChildren<Camera>();
+        //playerCamera = GetComponentInChildren<Camera>();
         collapseTotalProbabilities = 0;
         capCollapseProbability = 100;
     }
@@ -33,11 +34,12 @@ public class Collapse : MonoBehaviour
     void Update()
     {
         timer.text = " ";
-        collapseBar.fillAmount = collapseTotalProbabilities / capCollapseProbability;
-        if (collapseTotalProbabilities >= capCollapseProbability)  // Reemplaza esto con la condición para iniciar el colapso
+        //collapseBar.fillAmount = collapseTotalProbabilities / capCollapseProbability;
+        if (collapseTotalProbabilities >= capCollapseProbability && !isShaking)  // Reemplaza esto con la condición para iniciar el colapso
         {
             print("1");
             initialCamPos = playerCamera.gameObject.transform.localPosition;
+            isShaking = true;
             StartCoroutine(StartCollapse());
             collapseBar.fillAmount = collapseTotalProbabilities / capCollapseProbability;
         }
@@ -46,8 +48,9 @@ public class Collapse : MonoBehaviour
     public void CollapseProb()
     {
         collapseProbabilities = Random.Range(0, 25);
-        Debug.Log(collapseProbabilities);
         collapseTotalProbabilities += collapseProbabilities;
+        float prob = collapseTotalProbabilities / capCollapseProbability;
+        Debug.Log(prob);
         collapseBar.fillAmount = collapseTotalProbabilities / capCollapseProbability;
     }
 
@@ -84,6 +87,8 @@ public class Collapse : MonoBehaviour
         print("4");
         playerCamera.gameObject.transform.localPosition = initialCamPos;
         collapseTotalProbabilities = 0;
+        collapseBar.fillAmount = collapseTotalProbabilities / capCollapseProbability;
+        isShaking = false;
         print("5");
     }
 
@@ -92,7 +97,6 @@ public class Collapse : MonoBehaviour
         if (other.CompareTag("Shelter"))
         {
             isCollidingWithShelter = true;
-            playerCamera.gameObject.transform.localPosition = initialCamPos;
         }
     }
 

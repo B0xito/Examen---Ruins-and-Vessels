@@ -37,26 +37,38 @@ public class VesselsFabrication : MonoBehaviour
 
     void FabricateRed()
     {
-        playerInteractions.redCount -= 10;
-        redVesselsCount++;
+        if (redVesselsCount < gameManager.redVesselsObj)
+        {
+            playerInteractions.redCount -= 10;
+            redVesselsCount++;
+        }
     }
 
     void FabricateBlue()
     {
-        playerInteractions.blueCount -= 10;
-        blueVesselsCount++;      
+        if (blueVesselsCount < gameManager.blueVesselsObj)
+        {
+            playerInteractions.blueCount -= 10;
+            blueVesselsCount++;      
+        }
     }
 
     void FabricateGreen()
     {
-        playerInteractions.greenCount -= 10;
-        greenVesselsCount++;
+        if (greenVesselsCount < gameManager.greenVesselsObj)
+        {
+            playerInteractions.greenCount -= 10;
+            greenVesselsCount++;
+        }
     }
 
     void FabricateGolden() 
     { 
-        playerInteractions.goldenCount -= 10;
-        goldenVesselsCount++;
+        if (goldenVesselsCount < gameManager.goldenVesselsObj)
+        {
+            playerInteractions.goldenCount -= 10;
+            goldenVesselsCount++;
+        }   
     }
 
     public void OnTriggerStay(Collider other)

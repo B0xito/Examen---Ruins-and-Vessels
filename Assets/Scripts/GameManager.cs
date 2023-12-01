@@ -16,13 +16,15 @@ public class GameManager : MonoBehaviour
     [SerializeField] bool playerReady = false;
     [SerializeField] Animator exitDoorAnim; //Parent door
 
+    [Header("Rifts Generation")]
+    [SerializeField] GameObject rift;
+    [SerializeField] int totalRifts;
+    [SerializeField] int maxRifts = 20;
+    [SerializeField] BoxCollider spawnCollider;
+
     private void Start()
     {
-        vesselsFabrication = FindObjectOfType<VesselsFabrication>();
-        redVesselsObj = Random.Range(1, 6);
-        blueVesselsObj = Random.Range(1, 6);
-        greenVesselsObj = Random.Range(1, 6);
-        goldenVesselsObj = Random.Range(0, 3);
+        VesselsSet();
     }
 
     private void Update()
@@ -31,8 +33,65 @@ public class GameManager : MonoBehaviour
             vesselsFabrication.blueVesselsCount == blueVesselsObj &&
             vesselsFabrication.greenVesselsCount == greenVesselsObj)
         {
-            playerReady = true;
-            exitDoorAnim.SetBool("ready", true);
+            VesselsAdd();
         }
+
+        if (totalRifts < maxRifts)
+        {
+            Mined(maxRifts -= totalRifts);
+        }
+    }
+
+    void VesselsSet()
+    {
+        vesselsFabrication = FindObjectOfType<VesselsFabrication>();
+        redVesselsObj = Random.Range(1, 6);
+        blueVesselsObj = Random.Range(1, 6);
+        greenVesselsObj = Random.Range(1, 6);
+        goldenVesselsObj = Random.Range(0, 3);
+    }
+
+    void VesselsAdd() 
+    {       
+        playerReady = true;
+        exitDoorAnim.SetBool("ready", true);        
+    }
+
+    void Mined(int howMuch)
+    {
+        StartCoroutine(InvokeSpawnRandom(howMuch));
+    }
+
+    IEnumerator InvokeSpawnRandom(int howMuch)
+    {
+        for (int i = 0; i < howMuch; i++)
+        {
+            SpawnRiftInMap();
+        }
+        yield return null;
+    }
+
+    void SpawnRiftInMap()
+    {
+        // Selecciona un punto random dentro del area de spawneo
+        Vector3 randomPosition = GetRandomPositionInSpawnArea();
+
+        // Instancia el prefab en aquella posicion
+        Instantiate(rift, randomPosition, Quaternion.identity);
+
+        Debug.Log("Rift spawned");
+    }
+
+    Vector3 GetRandomPositionInSpawnArea()
+    {
+        // Genera una posicion random dentro del collider
+        Vector3 randomPosition = new Vector3(
+            Random.Range(spawnCollider.bounds.min.x, spawnCollider.bounds.max.x),
+            Random.Range(spawnCollider.bounds.min.y, spawnCollider.bounds.max.y),
+            Random.Range(spawnCollider.bounds.min.z, spawnCollider.bounds.max.z)
+        );
+
+        // Regresa la posicion random
+        return randomPosition;
     }
 }

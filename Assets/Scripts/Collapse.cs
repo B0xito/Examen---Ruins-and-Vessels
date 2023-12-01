@@ -14,7 +14,6 @@ public class Collapse : MonoBehaviour
     [SerializeField] Transform initialPosition;
     [SerializeField] Vector3 initialCamPos;
     [SerializeField] bool isCollidingWithShelter = false;
-
     [SerializeField] PlayerInteractions playerInteractions;
     [SerializeField] float collapseProbabilities;
     [SerializeField] float collapseTotalProbabilities;
@@ -60,7 +59,7 @@ public class Collapse : MonoBehaviour
         float elapsed = 0.0f;
         timer.text = elapsed.ToString("F0");
 
-        while (elapsed < shakeDuration && !isCollidingWithShelter)
+        while (elapsed < shakeDuration)
         {
             print("3");
             Vector3 originalCamPos = playerCamera.transform.localPosition;

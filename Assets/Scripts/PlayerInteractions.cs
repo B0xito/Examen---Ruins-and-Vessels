@@ -229,6 +229,7 @@ public class PlayerInteractions : MonoBehaviour
         {
             Debug.Log(item.GetComponent<Consumable>().consumableName + " " + "removed from consumables");
             currentStamina += item.GetComponent<Consumable>().regenerationAmount;
+            Destroy(item.transform.gameObject);
             consumables.Remove(item);
             itemUI.sprite = notItemSprite;
             itemAmount--;

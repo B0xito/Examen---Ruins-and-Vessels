@@ -18,9 +18,10 @@ public class GameManager : MonoBehaviour
 
     [Header("Rifts Generation")]
     [SerializeField] GameObject rift;
-    [SerializeField] int totalRifts;
+    public int totalRifts;
     [SerializeField] int maxRifts = 20;
     [SerializeField] BoxCollider spawnCollider;
+    [SerializeField] bool isMined;
 
     private void Start()
     {
@@ -36,10 +37,57 @@ public class GameManager : MonoBehaviour
             VesselsAdd();
         }
 
-        if (totalRifts < maxRifts)
+        if (totalRifts < maxRifts && isMined == false)
         {
             Mined(maxRifts -= totalRifts);
+            Debug.Log("mined");
         }
+    }
+
+
+    void Mined(int howMuch)
+    {
+        isMined = true;
+        for (int i = 0; i < howMuch; i++)
+        {
+            SpawnRiftInMap();
+        }
+        isMined = false;
+        maxRifts = 20;
+    }
+
+    //IEnumerator InvokeSpawnRandom(int howMuch)
+    //{
+    //    for (int i = 0; i < howMuch; i++)
+    //    {
+    //        SpawnRiftInMap();
+    //    }
+    //    yield return null;
+    //}
+
+    void SpawnRiftInMap()
+    {
+        // Selecciona un punto random dentro del area de spawneo
+        Vector3 randomPosition = GetRandomPositionInSpawnArea();
+
+        // Instancia el prefab en aquella posicion
+        Instantiate(rift, randomPosition, Quaternion.identity);
+
+        totalRifts++;
+        Debug.Log("Rift spawned");
+    }
+
+    Vector3 GetRandomPositionInSpawnArea()
+    {
+        // Genera una posicion random dentro del collider
+        Vector3 randomPosition = new Vector3(
+            Random.Range(spawnCollider.bounds.min.x, spawnCollider.bounds.max.x),
+            Random.Range(spawnCollider.bounds.min.y, spawnCollider.bounds.max.y),
+            Random.Range(spawnCollider.bounds.min.z, spawnCollider.bounds.max.z)
+        );
+
+        // Regresa la posicion random
+        return randomPosition;
     }
 
     void VesselsSet()
@@ -57,41 +105,4 @@ public class GameManager : MonoBehaviour
         exitDoorAnim.SetBool("ready", true);        
     }
 
-    void Mined(int howMuch)
-    {
-        StartCoroutine(InvokeSpawnRandom(howMuch));
-    }
-
-    IEnumerator InvokeSpawnRandom(int howMuch)
-    {
-        for (int i = 0; i < howMuch; i++)
-        {
-            SpawnRiftInMap();
-        }
-        yield return null;
-    }
-
-    void SpawnRiftInMap()
-    {
-        // Selecciona un punto random dentro del area de spawneo
-        Vector3 randomPosition = GetRandomPositionInSpawnArea();
-
-        // Instancia el prefab en aquella posicion
-        Instantiate(rift, randomPosition, Quaternion.identity);
-
-        Debug.Log("Rift spawned");
-    }
-
-    Vector3 GetRandomPositionInSpawnArea()
-    {
-        // Genera una posicion random dentro del collider
-        Vector3 randomPosition = new Vector3(
-            Random.Range(spawnCollider.bounds.min.x, spawnCollider.bounds.max.x),
-            Random.Range(spawnCollider.bounds.min.y, spawnCollider.bounds.max.y),
-            Random.Range(spawnCollider.bounds.min.z, spawnCollider.bounds.max.z)
-        );
-
-        // Regresa la posicion random
-        return randomPosition;
-    }
 }

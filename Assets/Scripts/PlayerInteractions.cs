@@ -33,6 +33,7 @@ public class PlayerInteractions : MonoBehaviour
     [SerializeField] LayerMask minableMask;
     [SerializeField] SpawnItem spawnItem;
     [SerializeField] Animator riftAnim;
+    [SerializeField] GameManager gameManager;
 
     [Header("Collapse")]
     [SerializeField] Collapse collapse;
@@ -78,6 +79,7 @@ public class PlayerInteractions : MonoBehaviour
         maxStamina = 100f;
         currentStamina = maxStamina;
         ogSpeed = walkSpeed;
+        gameManager = FindObjectOfType<GameManager>();
     }
 
     void Update()
@@ -183,7 +185,8 @@ public class PlayerInteractions : MonoBehaviour
                 Debug.Log("Mining");
                 if (hit.collider.CompareTag("Rift"))
                 {
-                    riftAnim.SetBool("mining", true);                   
+                    riftAnim.SetBool("mining", true);
+                    gameManager.GetComponent<GameManager>().totalRifts--;
                 }
                 else
                 {

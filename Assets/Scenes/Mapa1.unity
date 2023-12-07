@@ -555,6 +555,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7257782083674746475, guid: 1fae043e866281e4d9cfc2133c905251, type: 3}
   m_PrefabInstance: {fileID: 77415594}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &362061359 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4661459148564592680, guid: 22396b71dd0d02b47953edc1eb8dd036, type: 3}
+  m_PrefabInstance: {fileID: 2039825324}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &420439019
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1251,10 +1256,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8300000, guid: ab188a22d77165c47b8ba1464826008f, type: 3}
     - target: {fileID: 3855599348341982232, guid: cf86f20f9f2017a408439cab095d9426, type: 3}
-      propertyPath: collapse
-      value: 
-      objectReference: {fileID: 785167049}
-    - target: {fileID: 3855599348341982232, guid: cf86f20f9f2017a408439cab095d9426, type: 3}
       propertyPath: staminaBar
       value: 
       objectReference: {fileID: 160976988}
@@ -1307,13 +1308,21 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 630969722}
     - target: {fileID: 4624963320837971694, guid: cf86f20f9f2017a408439cab095d9426, type: 3}
+      propertyPath: effectSource
+      value: 
+      objectReference: {fileID: 1688226338}
+    - target: {fileID: 4624963320837971694, guid: cf86f20f9f2017a408439cab095d9426, type: 3}
       propertyPath: playerCamera
       value: 
       objectReference: {fileID: 87453203}
     - target: {fileID: 4624963320837971694, guid: cf86f20f9f2017a408439cab095d9426, type: 3}
+      propertyPath: earthquakeSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 8710078238424f74fb163c5b5fd4d4db, type: 3}
+    - target: {fileID: 4624963320837971694, guid: cf86f20f9f2017a408439cab095d9426, type: 3}
       propertyPath: initialPosition
       value: 
-      objectReference: {fileID: 785167051}
+      objectReference: {fileID: 362061359}
     - target: {fileID: 4624963320837971694, guid: cf86f20f9f2017a408439cab095d9426, type: 3}
       propertyPath: playerInteractions
       value: 
@@ -1323,17 +1332,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cf86f20f9f2017a408439cab095d9426, type: 3}
---- !u!114 &785167049 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4624963320837971694, guid: cf86f20f9f2017a408439cab095d9426, type: 3}
-  m_PrefabInstance: {fileID: 785167048}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 19702c45a8f31a642b7086748723fa2a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &785167050 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3855599348341982232, guid: cf86f20f9f2017a408439cab095d9426, type: 3}
@@ -2920,6 +2918,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: EffectsObjects
       objectReference: {fileID: 0}
+    - target: {fileID: 6694905855090487804, guid: a8fc21838bb7f9d408c4769284ac304f, type: 3}
+      propertyPath: Priority
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7136723418386036023, guid: a8fc21838bb7f9d408c4769284ac304f, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -3183,7 +3185,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6784595986885724667, guid: f453718b2005c1942a540b62d37c1847, type: 3}
       propertyPath: m_Volume
-      value: 0.5
+      value: 0.205
       objectReference: {fileID: 0}
     - target: {fileID: 8727236555180578049, guid: f453718b2005c1942a540b62d37c1847, type: 3}
       propertyPath: m_LocalPosition.x

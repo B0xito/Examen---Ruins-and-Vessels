@@ -22,6 +22,9 @@ public class Collapse : MonoBehaviour
     [SerializeField] TMP_Text timer;
     [SerializeField] bool isShaking;
 
+    public AudioSource effectSource;
+    public AudioClip earthquakeSound;
+
     private void Start()
     {
         player = GetComponent<Transform>();
@@ -39,6 +42,7 @@ public class Collapse : MonoBehaviour
             print("1");
             initialCamPos = playerCamera.gameObject.transform.localPosition;
             isShaking = true;
+            effectSource.clip = earthquakeSound;
             StartCoroutine(StartCollapse());
             collapseBar.fillAmount = collapseTotalProbabilities / capCollapseProbability;
         }
@@ -58,6 +62,7 @@ public class Collapse : MonoBehaviour
         print("2");
         float elapsed = 0.0f;
         timer.text = elapsed.ToString("F0");
+        effectSource.Play();
 
         while (elapsed < shakeDuration)
         {

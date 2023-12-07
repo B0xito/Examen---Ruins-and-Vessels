@@ -594,7 +594,7 @@ MonoBehaviour:
   spawnItem: {fileID: 0}
   riftAnim: {fileID: 0}
   gameManager: {fileID: 0}
-  collapse: {fileID: 0}
+  collapse: {fileID: 4624963320837971694}
   consumables: []
   itemAmount: 0
   itemAmountText: {fileID: 0}
@@ -612,8 +612,10 @@ MonoBehaviour:
   goldenCountText: {fileID: 0}
   effectPlayer: {fileID: 0}
   effectsObjects: {fileID: 0}
+  BGM: {fileID: 0}
   playerSteps: {fileID: 8300000, guid: a688a69186fc18449a77ba326b11de2f, type: 3}
   consumableSound: {fileID: 8300000, guid: b8c1ba4f9b6dce54f83eabfae468ed9c, type: 3}
+  BGMusic: {fileID: 0}
   riftMined: {fileID: 8300000, guid: 0193a7d3e5f58054fa9c1b32da857e02, type: 3}
 --- !u!114 &4624963320837971694
 MonoBehaviour:

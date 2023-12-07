@@ -74,6 +74,18 @@ public class PlayerInteractions : MonoBehaviour
     [SerializeField] TMP_Text goldenCountText;
     #endregion
 
+    #region Audio
+    [Header("Audio Sources")]
+    public AudioSource effectPlayer;
+    public AudioSource effectsObjects;
+
+    [Header("Audo Clips")]
+    public AudioClip playerSteps;
+    public AudioClip consumableSound;
+
+    public AudioClip riftMined;
+    #endregion
+
     private void Start()
     {
         maxStamina = 100f;
@@ -100,7 +112,9 @@ public class PlayerInteractions : MonoBehaviour
         #region Consumable
         if (Input.GetKeyDown(KeyCode.C) && fullStamina == false)
         {
+            effectPlayer.clip = consumableSound;
             ConsumeItem(currentItem);
+            effectPlayer.Play();
         }
 
         if (consumables.Count > 0) { regenAmount.SetActive(true); }
@@ -131,6 +145,13 @@ public class PlayerInteractions : MonoBehaviour
         {
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(movement), 0.15F);
         }      
+
+        if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.S) || 
+            Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.D))
+        {
+            effectPlayer.clip = playerSteps;
+            effectPlayer.Play();
+        }
     }
 
     void CheckStamina()
@@ -185,8 +206,11 @@ public class PlayerInteractions : MonoBehaviour
                 Debug.Log("Mining");
                 if (hit.collider.CompareTag("Rift"))
                 {
+                    effectsObjects.clip = riftMined;
+                    effectsObjects.Play();
                     riftAnim.SetBool("mining", true);
                     gameManager.GetComponent<GameManager>().totalRifts--;
+
                 }
                 else
                 {

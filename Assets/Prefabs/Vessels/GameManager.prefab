@@ -72,8 +72,9 @@ MonoBehaviour:
   greenVesselsObj: 0
   goldenVesselsObj: 0
   playerReady: 0
-  exitDoorAnim: {fileID: 0}
+  exitDoorAnim: {fileID: 4392410017682758079, guid: 3bf493061d3bc6b4b80af68865286b36, type: 3}
   rift: {fileID: 5397700467956159947, guid: f12b5106beb50d346ac4ba2ce8b01c40, type: 3}
   totalRifts: 0
   maxRifts: 20
   spawnCollider: {fileID: 290712183099935701}
+  isMined: 0

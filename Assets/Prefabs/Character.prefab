@@ -599,7 +599,7 @@ MonoBehaviour:
   itemAmount: 0
   itemAmountText: {fileID: 0}
   itemUI: {fileID: 0}
-  notItemSprite: {fileID: 21300000, guid: b7970b7a0a5ba764a9ecbba00586c9ba, type: 3}
+  notItemSprite: {fileID: 21300000, guid: bd3d7db3332e2cd41bf9e99b40b33ed7, type: 3}
   regenAmount: {fileID: 0}
   addingPiece: 0
   redCount: 0
@@ -610,6 +610,11 @@ MonoBehaviour:
   greenCountText: {fileID: 0}
   goldenCount: 0
   goldenCountText: {fileID: 0}
+  effectPlayer: {fileID: 0}
+  effectsObjects: {fileID: 0}
+  playerSteps: {fileID: 8300000, guid: a688a69186fc18449a77ba326b11de2f, type: 3}
+  consumableSound: {fileID: 8300000, guid: b8c1ba4f9b6dce54f83eabfae468ed9c, type: 3}
+  riftMined: {fileID: 8300000, guid: 0193a7d3e5f58054fa9c1b32da857e02, type: 3}
 --- !u!114 &4624963320837971694
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -623,7 +628,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerCamera: {fileID: 0}
-  player: {fileID: 0}
+  player: {fileID: 3791393346933099135}
   shakeDuration: 5
   shakeMagnitude: 0.2
   initialPosition: {fileID: 0}

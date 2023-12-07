@@ -174,7 +174,7 @@ MonoBehaviour:
   - {fileID: 2439759893603481608, guid: a861ff1629584144faa04951a8c0feea, type: 3}
   - {fileID: 6179015743265588627, guid: eff1efbee96d8194fb8b73ea42bd19ab, type: 3}
   - {fileID: 2818147904205115209, guid: 8e262cccf87721847ae0e76e07c6223a, type: 3}
-  - {fileID: 8794398079341967242, guid: 63f2d8b5032b08d4aac0b69feffd8b11, type: 3}
+  - {fileID: 8578080005080130671, guid: beb5404f5f0d0524899572c02ebe0aae, type: 3}
   SpawnProbabilities:
   - 30
   - 25

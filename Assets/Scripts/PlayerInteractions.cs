@@ -78,16 +78,23 @@ public class PlayerInteractions : MonoBehaviour
     [Header("Audio Sources")]
     public AudioSource effectPlayer;
     public AudioSource effectsObjects;
+    public AudioSource BGM;
 
     [Header("Audo Clips")]
     public AudioClip playerSteps;
     public AudioClip consumableSound;
+    public AudioClip BGMusic;
 
     public AudioClip riftMined;
     #endregion
+    private void Awake()
+    {
+        BGM.clip = BGMusic;
+    }
 
     private void Start()
     {
+        BGM.Play();
         maxStamina = 100f;
         currentStamina = maxStamina;
         ogSpeed = walkSpeed;

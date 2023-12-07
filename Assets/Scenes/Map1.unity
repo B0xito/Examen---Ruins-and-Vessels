@@ -734,28 +734,6 @@ AudioSource:
   m_CorrespondingSourceObject: {fileID: 6694905855090487804, guid: a8fc21838bb7f9d408c4769284ac304f, type: 3}
   m_PrefabInstance: {fileID: 1436868280}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1256288786 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8870071106246327067, guid: 16f0b2797febd9544b6faf37748d9d40, type: 3}
-  m_PrefabInstance: {fileID: 217298656}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1277976057 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 61663218838214705, guid: 16f0b2797febd9544b6faf37748d9d40, type: 3}
-  m_PrefabInstance: {fileID: 217298656}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &1370240801
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -867,7 +845,7 @@ PrefabInstance:
     - target: {fileID: 4624963320837971694, guid: cf86f20f9f2017a408439cab095d9426, type: 3}
       propertyPath: collapseBar
       value: 
-      objectReference: {fileID: 1986179866}
+      objectReference: {fileID: 0}
     - target: {fileID: 4624963320837971694, guid: cf86f20f9f2017a408439cab095d9426, type: 3}
       propertyPath: playerCamera
       value: 
@@ -1044,15 +1022,15 @@ PrefabInstance:
     - target: {fileID: 2387441372015473899, guid: a8adbdd2467bae140b68c75e32811a4a, type: 3}
       propertyPath: blueVesselsText
       value: 
-      objectReference: {fileID: 1854219132}
+      objectReference: {fileID: 0}
     - target: {fileID: 2387441372015473899, guid: a8adbdd2467bae140b68c75e32811a4a, type: 3}
       propertyPath: greenVesselsText
       value: 
-      objectReference: {fileID: 1277976057}
+      objectReference: {fileID: 0}
     - target: {fileID: 2387441372015473899, guid: a8adbdd2467bae140b68c75e32811a4a, type: 3}
       propertyPath: goldenVesselsText
       value: 
-      objectReference: {fileID: 1256288786}
+      objectReference: {fileID: 0}
     - target: {fileID: 3579271051655730301, guid: a8adbdd2467bae140b68c75e32811a4a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 8.329222
@@ -1187,28 +1165,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 33754697f9dc6884498591cb6fd1cbc2, type: 3}
---- !u!114 &1854219132 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3450769844354716789, guid: 16f0b2797febd9544b6faf37748d9d40, type: 3}
-  m_PrefabInstance: {fileID: 217298656}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1986179866 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4642681835487051128, guid: 16f0b2797febd9544b6faf37748d9d40, type: 3}
-  m_PrefabInstance: {fileID: 217298656}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!95 &2027154019 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 5910446371860274557, guid: 9eb950ffbf10f2546974d4c8478b3dbe, type: 3}
